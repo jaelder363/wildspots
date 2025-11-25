@@ -1,0 +1,574 @@
+paths:
+
+  /profiles:
+    get:
+      tags: [profiles]
+      summary: List profiles (paginated)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: visibility
+          in: query
+          schema:
+            type: string
+            enum: [public, private]
+      responses:
+        '200':
+          description: A paginated list of profiles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [profiles]
+      summary: Create or upsert a profile (safe)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '201':
+          description: Profile created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: Bad request (missing fields)
+        '403':
+          description: Forbidden (invalid token or insufficient permissions)
+        '409':
+          description: Conflict (FK violation if user_id not found)
+
+  /profiles/{user_id}:
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [profiles]
+      summary: Get profile by user_id
+      responses:
+        '200':
+          description: Profile object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not found
+    put:
+      tags: [profiles]
+      summary: Replace or update a profile for user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+
+  /campsites:
+    get:
+      tags: [campsites]
+      summary: List campsites (filterable & paginated)
+      parameters:
+        - name: owner_user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: terrain_type
+          in: query
+          schema:
+            type: string
+        - name: price_range
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Campsite list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [campsites]
+      summary: Create a campsite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campsite'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campsite'
+
+  /campsites/{campsite_id}:
+    parameters:
+      - name: campsite_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [campsites]
+      summary: Get campsite by id
+      responses:
+        '200':
+          description: Campsite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campsite'
+        '404':
+          description: Not found
+    put:
+      tags: [campsites]
+      summary: Update campsite (partial or full)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campsite'
+      responses:
+        '200':
+          description: Updated campsite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campsite'
+
+  /reviews:
+    get:
+      tags: [reviews]
+      summary: List reviews (filter by campsite or user)
+      parameters:
+        - name: campsite_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Review list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [reviews]
+      summary: Create a review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '201':
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '409':
+          description: Conflict (e.g., FK violation)
+
+  /reviews/{review_id}:
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [reviews]
+      summary: Get review by id
+      responses:
+        '200':
+          description: Review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+    put:
+      tags: [reviews]
+      summary: Update review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Updated review
+
+  /comments:
+    get:
+      tags: [comments]
+      summary: List comments (filterable)
+      parameters:
+        - name: review_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Comments list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [comments]
+      summary: Create comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: Created
+
+  /comments/{comment_id}:
+    parameters:
+      - name: comment_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [comments]
+      summary: Get a comment
+      responses:
+        '200':
+          description: Comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+    put:
+      tags: [comments]
+      summary: Update comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Updated
+
+  /lists:
+    get:
+      tags: [lists]
+      summary: List user lists (filter by user or visibility)
+      parameters:
+        - name: user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: visibility
+          in: query
+          schema:
+            type: string
+            enum: [personal, shared, public]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Lists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [lists]
+      summary: Create a list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+
+  /lists/{list_id}:
+    parameters:
+      - name: list_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [lists]
+      summary: Get a list
+      responses:
+        '200':
+          description: List object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+    put:
+      tags: [lists]
+      summary: Update a list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      responses:
+        '200':
+          description: Updated
+
+  /list_items:
+    get:
+      tags: [list_items]
+      summary: Get list items (filter by list or campsite)
+      parameters:
+        - name: list_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: campsite_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [list_items]
+      summary: Add a campsite to a list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+      responses:
+        '201':
+          description: Created
+
+  /verification_requests:
+    get:
+      tags: [verification_requests]
+      summary: List verification requests
+      parameters:
+        - name: user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, denied]
+      responses:
+        '200':
+          description: Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [verification_requests]
+      summary: Submit verification request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags: [verification_requests]
+      summary: Admin updates verification request status
+      description: "Requires admin role (server side)."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        '200':
+          description: Updated
+
+  /reports:
+    get:
+      tags: [reports]
+      summary: List reports (admin or owner)
+      parameters:
+        - name: user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [opened, reviewing, resolved]
+      responses:
+        '200':
+          description: Reports
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [reports]
+      summary: Create a report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags: [reports]
+      summary: Admin updates report status
+      description: "Requires admin role."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '200':
+          description: Updated
+
+  /follows:
+    get:
+      tags: [follows]
+      summary: List follows for a user
+      parameters:
+        - name: follower_user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: followed_user_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Follow list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+    post:
+      tags: [follows]
+      summary: Create a follow (user follows another user)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Follow'
+      responses:
+        '201':
+          description: Created

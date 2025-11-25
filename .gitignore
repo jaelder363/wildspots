@@ -1,0 +1,17 @@
+node_modules/
+.env
+.DS_Store
+/dist/
+/build/
+/.next/
+/out/
+
+# API ENVS
+/api/.env
+
+# Client ENVS
+/client/.env    
+/client/.env.local
+/client/.env.*.local
+
+
