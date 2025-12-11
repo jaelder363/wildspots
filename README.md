@@ -9,6 +9,15 @@ A mobile-first, community-driven platform for discovering and sharing camping si
 - supabase/ — SQL migrations + seeds
 - docs/    — PRD, strategy, feature chart, annotated user stories, usage contexts
 
+## Deployed Application
+
+https://main.ds390r36pvryt.amplifyapp.com/
+
+### Notes
+- Incomplete Features: Couldn't get OTP through Supabase to work
+- Support Contact: jaelder@csuchico.edu
+- Announcement: I have given my best to get the app running to the best of my ability
+
 ## Getting Started (Local)
 
 1. Prerequisites

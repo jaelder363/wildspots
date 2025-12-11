@@ -1,4 +1,15 @@
+# Wild Spots Client
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Deployed Application
+
+https://main.ds390r36pvryt.amplifyapp.com/
+
+### Notes
+- Incomplete Features: Couldn't get OTP through Supabase to work
+- Support Contact: jaelder@csuchico.edu
+- Announcement: I have given my best to get the app running to the best of my ability
 
 ## Getting Started
 
