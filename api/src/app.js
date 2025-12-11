@@ -7,6 +7,7 @@ const { supabase } = require('./db/supabase');
 
 // Import routes
 const profilesRouter = require('./routes/profiles.routes');
+const authRouter = require('./routes/auth');
 // Other route imports will be added here
 
 const app = express();
@@ -35,6 +36,7 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/profiles', profilesRouter);
 // Other API routes will be mounted here
 

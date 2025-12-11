@@ -202,3 +202,13 @@ API requests are rate limited to prevent abuse. The current limits are:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Deployed Application
+https://main.ds390r36pvryt.amplifyapp.com/ 
+
+Imcomplete Features- couldn't get otp through supabase to work
+
+Support Contact Method
+jaelder@csuchico.edu
+
+Announcement - I have given my best to get the app running hopefully to good enough ability 
